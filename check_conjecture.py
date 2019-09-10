@@ -54,9 +54,11 @@ def write_plotting_data():
       if item[0] is not '0':
         if int(item[0]) == 2 * n:
           value_dict[n].append(int(item[1]))
-  #print("value_dict={}".format(value_dict))
+  print("value_dict={}".format(value_dict))
   for k,v in value_dict.items():
-    plotting_data.append([k,max(v)])
+    print('handling {} {}'.format(k,v))
+    if len(v) > 0:
+      plotting_data.append([k,max(v)])
   plotting_data.sort(key = lambda x: x[0])
   print("plotting_data={}".format(plotting_data))
   with open('plotting_data.csv','w') as fp:
@@ -78,7 +80,7 @@ while q > 1:
     best = q
   else:
     break
-  q -= 0.000001
+  q -= 0.1
 (min_n,max_n) = get_size_bounds()
 write_plotting_data()
 print("min_n = {}  max_n = {}".format(min_n,max_n))

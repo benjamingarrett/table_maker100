@@ -8,7 +8,8 @@ f = lambda p,q: p**q
 #f = lambda p,q: q*p**2
 g = lambda p,q: q**p
 
-k = 2.88532
+#k = 2.862 # for olcs traceback
+k = 1.08  # for kmp anb
 h = 1.88
 i = 58
 x = []

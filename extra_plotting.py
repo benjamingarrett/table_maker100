@@ -1,7 +1,19 @@
-import csv, itertools, os
-import numpy as np
 import matplotlib.pyplot as plt
-import math
+
+#x = list(range(100))
+#y = list(range(20,120))
+x = [0,100]
+y = [20,119]
+print(x)
+print(y)
+#plt.plot(x,y)
+plt.loglog(x,y)
+plt.show()
+exit()
+
+
+
+
 
 x = []
 y = []
@@ -44,4 +56,3 @@ ax2.plot(t, data2, color=color)
 ax2.tick_params(axis='y', labelcolor=color)
 fig.tight_layout()
 plt.show()
-

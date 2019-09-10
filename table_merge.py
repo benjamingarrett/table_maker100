@@ -1,7 +1,7 @@
-import csv, itertools, os
+import csv,itertools,os,sys
 
-def write_lists(merged, fields):
-  with open('merged.csv', 'w', newline='') as csvfile:
+def write_lists(merged,fields,output_fname):
+  with open(output_fname, 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fields)
     writer.writeheader()
     for entry in merged:
@@ -39,13 +39,16 @@ def fill_table(table):
     prev = current
   return filled
 
-d = os.listdir('./results')
+#input_path = './lcs_results'
+input_path = sys.argv[1]
+output_fname = sys.argv[2]
+d = os.listdir(input_path)
 merged = []
 fields = ['_']
 f = lambda x: x if len(x) > 0 else '0'
 lists = []
 for new_field in d:
-  new_list = [line.rstrip('\n').split(',') for line in open('./results/' + new_field)]
+  new_list = [line.rstrip('\n').split(',') for line in open(input_path+'/'+new_field)]
   new_list = [[f(x[0]),f(x[1])] for x in new_list]
   for item in new_list:
     if item[0] == '0':
@@ -56,5 +59,5 @@ lists.sort(key=lambda x: int(x[1][0][1]))
 for item in lists:
   new_list = [{'_': x[0], item[0]: x[1]} for x in item[1]]
   (merged, fields) = merge_lists(merged, fields, new_list, item[0])
-write_lists(fill_table(merged), fields)
+write_lists(fill_table(merged),fields,output_fname)
 
