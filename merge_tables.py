@@ -48,13 +48,14 @@ fields = ['_']
 f = lambda x: x if len(x) > 0 else '0'
 lists = []
 for new_field in d:
-  new_list = [line.rstrip('\n').split(',') for line in open(input_path+'/'+new_field)]
-  new_list = [[f(x[0]),f(x[1])] for x in new_list]
-  for item in new_list:
-    if item[0] == '0':
-      fname = item[1][0:item[1].find('.')]
-      item[1] = item[1][0:item[1].find('-')]
-  lists.append([fname, new_list])
+  if 'csv' in new_field:
+    new_list = [line.rstrip('\n').split(',') for line in open(input_path+'/'+new_field)]
+    new_list = [[f(x[0]),f(x[1])] for x in new_list]
+    for item in new_list:
+      if item[0] == '0':
+        fname = item[1][0:item[1].find('.')]
+        item[1] = item[1][0:item[1].find('-')]
+    lists.append([fname, new_list])
 lists.sort(key=lambda x: int(x[1][0][1]))
 for item in lists:
   new_list = [{'_': x[0], item[0]: x[1]} for x in item[1]]
