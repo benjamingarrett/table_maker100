@@ -1,64 +1,30 @@
 import csv,itertools,os,sys
-
-def write_lists(merged,fields,output_fname):
+def write_csv(rows,field_list,output_fname):
   with open(output_fname, 'w', newline='') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=fields)
+    writer = csv.DictWriter(csvfile, fieldnames=field_list)
     writer.writeheader()
-    for entry in merged:
-      writer.writerow(entry)
+    for row_dict in rows:
+      writer.writerow(row_dict)
 
-def merge_lists(current_list, fields, new_list, new_field, descending=True):
-  fields.append(new_field)
-  while len(new_list) > 0:
-    entry = new_list.pop(0)
-    merged = False
-    for x in current_list:
-      if x['_'] == entry['_']:
-        x.update(entry)
-        merged = True
-        break
-    if merged == False:
-      current_list.append(entry)
-  if descending == True:
-    return (sorted(current_list, key = lambda i: int(i['_']), reverse=True), fields)
-  else:
-    return (sorted(current_list, key = lambda i: int(i['_'])), fields)
+def init(first_column,first_field):
+  return ([{first_field:x} for x in first_column],[first_field])
 
-def fill_table(table):
-  filled = []
-  entry = table.pop(0)
-  prev = int(entry['_'])
-  filled.append(entry)
-  while len(table) > 0:
-    entry = table.pop(0)
-    current = int(entry['_'])
-    while current < prev - 1:
-      prev -= 1
-      filled.append({'_': prev})
-    filled.append(entry)
-    prev = current
-  return filled
+def merge(rows,field_list,first_field,new_column,new_field):
+  field_list.append(new_field)
+  while len(new_column)>0:
+    row=new_column.pop(0)
+    if 'COMMENT' not in row[0] and 'SORT_BY' not in row[0]:
+      for current in rows:
+        if current[first_field]==int(row[0]):
+          current.update({new_field:row[1]})
+  return (rows,field_list)
 
-#input_path = './lcs_results'
-input_path = sys.argv[1]
-output_fname = sys.argv[2]
-d = os.listdir(input_path)
-merged = []
-fields = ['_']
-f = lambda x: x if len(x) > 0 else '0'
-lists = []
-for new_field in d:
-  if 'csv' in new_field:
-    new_list = [line.rstrip('\n').split(',') for line in open(input_path+'/'+new_field)]
-    new_list = [[f(x[0]),f(x[1])] for x in new_list]
-    for item in new_list:
-      if item[0] == '0':
-        fname = item[1][0:item[1].find('.')]
-        item[1] = item[1][0:item[1].find('-')]
-    lists.append([fname, new_list])
-lists.sort(key=lambda x: int(x[1][0][1]))
+lists=sorted([[ln.rstrip('\n').split(',') for ln in open(sys.argv[1]+'/'+fn)] for fn in os.listdir(sys.argv[1]) if 'csv' in fn],key=lambda k:(int(k[1][1]),k[0][1]))
+max_row_key=max(list(itertools.chain(*[[int(x[0]) for x in y if 'COMMENT' not in x[0] and 'SORT_BY' not in x[0]] for y in lists])))
+min_row_key=min(list(itertools.chain(*[[int(x[0]) for x in y if 'COMMENT' not in x[0] and 'SORT_BY' not in x[0]] for y in lists])))
+a=list(range(min_row_key,max_row_key+1))
+a.reverse()
+(rows,field_list)=init(a,'cache size')
 for item in lists:
-  new_list = [{'_': x[0], item[0]: x[1]} for x in item[1]]
-  (merged, fields) = merge_lists(merged, fields, new_list, item[0])
-write_lists(fill_table(merged),fields,output_fname)
-
+  (rows,field_list)=merge(rows,field_list,'cache size',item,[x for x in item if 'COMMENT' in x[0]][0][1])
+write_csv(rows,field_list,sys.argv[2])
