@@ -1,4 +1,5 @@
 import csv,itertools,os,sys
+
 def write_csv(rows,field_list,output_fname):
   with open(output_fname, 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=field_list)
