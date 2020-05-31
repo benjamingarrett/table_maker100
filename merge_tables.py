@@ -1,3 +1,8 @@
+# Usage: python merge_tables.py <folder with csv files> <output filename>
+# Description: Given a collection of N 2-column csv files, this script merges them all into one (N+1)-column table, with the firstmost column being the left column
+#   from all input tables, adding empty rows if necessary in order for data to be given as continuous rows. The COMMENT field explains what the given column means.
+#   The SORT_BY field is used to order the columns from left to right.
+
 import csv,itertools,os,sys
 
 def write_csv(rows,field_list,output_fname):
@@ -7,8 +12,10 @@ def write_csv(rows,field_list,output_fname):
     for row_dict in rows:
       writer.writerow(row_dict)
 
+
 def init(first_column,first_field):
   return ([{first_field:x} for x in first_column],[first_field])
+
 
 def merge(rows,field_list,first_field,new_column,new_field):
   field_list.append(new_field)
@@ -19,6 +26,7 @@ def merge(rows,field_list,first_field,new_column,new_field):
         if current[first_field]==int(row[0]):
           current.update({new_field:row[1]})
   return (rows,field_list)
+
 
 lists=sorted([[ln.rstrip('\n').split(',') for ln in open(sys.argv[1]+'/'+fn)] for fn in os.listdir(sys.argv[1]) if 'csv' in fn],key=lambda k:(int(k[1][1]),k[0][1]))
 max_row_key=max(list(itertools.chain(*[[int(x[0]) for x in y if 'COMMENT' not in x[0] and 'SORT_BY' not in x[0]] for y in lists])))
