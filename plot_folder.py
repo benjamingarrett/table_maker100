@@ -1,5 +1,9 @@
+# Usage: python plot_folder.py <folder>
+
+
 import csv,itertools,os,sys,re
 import matplotlib.pyplot as plt
+
 
 plot_line_types=['-','--','-.',':']
 plot_colors=['b','g','r','c','m','y','k']
@@ -11,12 +15,12 @@ line_type_idx=0
 for item in lists:
   print(item)
   label_=[k[1] for k in item if 'COMMENT' in k[0]]
-  print(sys.argv[2])
+  #print(sys.argv[2])
   print(label_)
-  #if True:
+  if True:
   #if bool(re.search(sys.argv[2]+'\Z',label_[0]))==True:
   #if bool(re.search(sys.argv[2],label_[0]))==True:a
-  if bool(re.search('_100',label_[0]))==True or bool(re.search('_200',label_[0]))==True or bool(re.search('_300',label_[0]))==True or bool(re.search('_400',label_[0]))==True or bool(re.search('_500',label_[0]))==True:
+  #if bool(re.search('_100',label_[0]))==True or bool(re.search('_200',label_[0]))==True or bool(re.search('_300',label_[0]))==True or bool(re.search('_400',label_[0]))==True or bool(re.search('_500',label_[0]))==True:
     x=[int(k[0]) for k in item if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0]]
     y=[int(k[1]) for k in item if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0]]
     print(x)
