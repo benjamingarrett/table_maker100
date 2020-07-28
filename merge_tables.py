@@ -36,4 +36,17 @@ a.reverse()
 (rows,field_list)=init(a,'cache size')
 for item in lists:
   (rows,field_list)=merge(rows,field_list,'cache size',item,[x for x in item if 'COMMENT' in x[0]][0][1])
-write_csv(rows,field_list,sys.argv[2])
+
+
+chosen_fields = input('Enter the fields to display in the desired order: ').split(',')
+chosen_fields.insert(0,'cache size')
+aliases = {k.split('=')[0]: k.split('=')[1] for k in chosen_fields if k.find('=') != -1}
+for field in chosen_fields:
+  if field not in aliases and field.find('=') == -1:
+    aliases[field] = field
+print('aliases: {}'.format(aliases))
+custom_rows = [{aliases[k]:v for k,v in row.items() if k in aliases.keys()} for row in rows]
+aliased_fields = [aliases[k] for k in chosen_fields]
+print('custom rows: {}'.format(custom_rows))
+
+write_csv(custom_rows, aliased_fields, sys.argv[2])
