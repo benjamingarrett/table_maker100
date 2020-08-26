@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if len(k) < 3:
       warn += 1
       print('no empirical data found')
-      exit(1)
+      #exit(1)
     else:
       rows.append({'n': int(k[1][1]), 'size': int(k[2][0]), 'misses': int(k[2][1])})
   print('warnings: {}'.format(warn))

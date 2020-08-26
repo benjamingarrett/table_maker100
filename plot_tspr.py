@@ -1,12 +1,16 @@
-import matplotlib.pyplot as plt
-import os
+# Usage: python plot_tspr.py <folder>
 
-results_dir = '../misc_phd/output/results/tsp/tspr/'
-d = os.listdir(results_dir)
+
+import matplotlib.pyplot as plt
+import os, sys
+
+
+folder = sys.argv[1]
+d = os.listdir(folder)
 for j,ff in enumerate(d):
   print('{}:{}'.format(j,ff))
 idx = int(input("Choose file by entering number: "))
-fname = results_dir + d[idx]
+fname = folder + d[idx]
 print('chosen: {}'.format(fname))
 lines = [line.rstrip('\n') for line in open(fname)]
 for j,line in enumerate(lines):
