@@ -11,7 +11,7 @@ def do_plot(folder, title, x_axis, y_axis):
   plot_colors = ['b','g','r','c','m','y','k']
   lists = []
   for fn in os.listdir(folder):
-    if not os.path.isdir(folder+'/'+fn):
+    if not os.path.isdir(folder+'/'+fn) and not (folder+'/'+fn).endswith('.log'): 
       lists.append((fn, [ln.rstrip('\n').split(',') for ln in open(folder+'/'+fn)]))
   #lists = sorted([[ln.rstrip('\n').split(',') for ln in open(folder+'/'+fn)] for fn in os.listdir(folder)], key=lambda k:(int(k[1][1]),k[0][1]))
   #print(lists)
