@@ -33,15 +33,16 @@ def do_plot(folder, title, x_axis, y_axis, legend_location='lower_right'):
         label_ = item
     print(label_)
     if True:
-      x = [int(k[0]) for k in item[1] if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0] and 'LABEL' not in k[0] and 'problem_size' not in k[0]]
-      y = [int(k[1]) for k in item[1] if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0] and 'LABEL' not in k[0] and 'cache_misses' not in k[1]]
+      x = [float(k[0]) for k in item[1] if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0] and 'LABEL' not in k[0] and 'problem_size' not in k[0]]
+      y = [float(k[1]) for k in item[1] if 'COMMENT' not in k[0] and 'SORT_BY' not in k[0] and 'LABEL' not in k[0] and 'cache_misses' not in k[1]]
       print(x)
       print(y)
       color = plot_colors[color_idx]
       line_type = plot_line_types[line_type_idx]
       line_spec = color+line_type
       ax.plot(x, y, line_spec, linewidth=1, label=label_)
-      #ax.plot(x, y, ',', label=label_)
+      #ax.loglog(x, y, line_spec, basex=2, basey=2, linewidth=1, label=label_)
+      #ax.plot(x, y, 'o', label=label_)
       color_idx = (color_idx+1)%len(plot_colors)
       line_type_idx = (line_type_idx+1)%len(plot_line_types)
   plt.xlabel(x_axis)
